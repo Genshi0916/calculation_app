@@ -1,25 +1,71 @@
 <!DOCTYPE html>
-<title>はじめてのVue.js入門</title>
-<script src="https://unpkg.com/vue@2.5.17"></script>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>吹奏楽部高専祭計算ソフト</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div id="app">
-  <div v-bind:style="errorMessageStyle">
-  <ul>
-    <li v-for="item in items" v-bind:key="item.name">
-      {{item.name}}の個数 <input type="number" v-model="item.quantity" min="0">
-    </li>
-  </ul>
-  <hr>
-    <ul>
-      <li v-for="item in items" v-bind:key="item.name">
-        {{item.name}}:{{item.price}} × {{item.quantity}} = {{item.price*item.quantity | numberWithDelimiter}}円
-      </li>
-    </ul>
-    <p>{{items[0].name}}: {{items[0].price}} × {{items[0].quantity}}</p>
-    <p>小計:{{totalPrice|numberWithDelimiter}}円</p>
-    <p>合計（税込み）: {{totalPriceWithTax|numberWithDelimiter}}円</p>
-    <p v-show="!canBuy">{{1000|numberWithDelimiter}}円以上からご購入いただけます</p>
-    <button v-bind:disabled="!canBuy" v-on:click="doBuy">購入</button>
+  <div id="app">
+    <h1>吹奏楽部高専祭計算ソフト</h1>
+    <label v-for="label in options" >
+      <input type="radio"
+        v-model="current"
+        v-bind:value="label.value">{{ label.label }}
+    </label>
+    <table>
+      <thead v-pre>
+        <tr>
+          <th class="id">順番</th>
+          <th class="comment">売ったもの</th>
+          <th class="state">状態</th>
+          <th class="button">-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in computedTodos"
+          v-bind:key="item.id"
+          v-bind:class="{done:item.state}">
+          <th>{{ item.id }}</th>
+          <td>{{ item.comment }}</td>
+          <td class="state">
+            <button v-on:click="doChangeState(item)">
+              {{ labels[item.state] }}
+            </button>
+          </td>
+          <td class="button">
+            <button v-on:click.ctrl="doRemove(item)">
+              削除
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <h2>商品</h2>
+      <ul>
+        <li v-for="shouhin in goods" v-bind:key="shouhin.name">
+          {{shouhin.name}}の個数: <input type="number" v-on:input="shouhin.quantity=$event.target.value" v-bind:value="shouhin.quantity" min="0">
+        </li>
+      </ul>
+      <h2>合計{{totalPrice}}円</h2>
+      <h4>お預かり<input type="number" min="0" v-model="oazukari"></h4>
+      <h4>おつり{{oazukari-totalPrice}}円</h4>
+
+
+      <form class="add-form" v-on:submit.prevent="doAdd">
+        コメント <input type="text" ref="comment">
+        <button type="submit">追加</button>
+      </form>
+    </div>
+
+    <p>コントロールを押しながらクリックで削除</p>
   </div>
-</div>
-<script src="app.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="main.js"></script>
+</body>
+</html>
