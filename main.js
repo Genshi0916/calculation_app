@@ -17,7 +17,7 @@ var goods = [
   {
     name:'ショートケーキ',
     price:400,
-    quantity:'0'
+    quantity:0
   },
   {
     name:'チョコケーキ',
@@ -31,17 +31,17 @@ var goods = [
   }
 ]
 
-new Vue({
+var vm =new Vue({
   el: '#app',
   data: {
     goods:goods,
     todos: [],
     options: [
-      { value: 0, label: '会計中' },
+      { value: 0, label: '会計' },
       { value: 1, label: '会計済み' }
     ],
     current:0,
-    oazukari:0
+    oazukari:0,
   },
 
   computed: {
@@ -57,15 +57,20 @@ new Vue({
       },0)
     },
 
+    siki:function(){
+      var siki = "ショート:"+this.goods[0].quantity+"チョコ:"+this.goods[1].quantity+"いちご:"+this.goods[2].quantity;
+      return siki
+      },
+
     labels() {
       return this.options.reduce(function (a, b) {
         return Object.assign(a, { [b.value]: b.label })
       }, {})
-    }
+    },
 
-    // vif:function(){
-    //   return this.value = 0;
-    // }
+    vif:function(){
+      return this.current==0
+    }
   },
 
   watch: {
@@ -82,7 +87,7 @@ new Vue({
   },
 
   methods: {
-    doAdd: function(event, value) {
+    doAdd: function() {
       var comment = this.$refs.comment
       if (!comment.value.length) {
         return
@@ -90,13 +95,9 @@ new Vue({
       this.todos.push({
         id: todoStorage.uid++,
         comment: comment.value,
-        state: 0
+        state: 1
       })
       comment.value = ''
-    },
-
-    doChangeState: function (item) {
-      item.state = !item.state ? 1 : 0
     },
 
     doRemove: function (item) {

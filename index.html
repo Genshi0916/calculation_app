@@ -15,12 +15,13 @@
         v-bind:value="label.value">{{ label.label }}
     </label>
     <table>
-      <thead v-pre>
+      <thead v-if="!vif">
         <tr>
           <th class="id">順番</th>
-          <th class="comment">売ったもの</th>
+          <th class="comment">履歴</th>
           <th class="state">状態</th>
           <th class="button">-</th>
+        <p v-if="!vif">コントロールを押しながらクリックで削除</p>
         </tr>
       </thead>
       <tbody>
@@ -31,9 +32,9 @@
           <th>{{ item.id }}</th>
           <td>{{ item.comment }}</td>
           <td class="state">
-            <button v-on:click="doChangeState(item)">
+            <h5>
               {{ labels[item.state] }}
-            </button>
+            </h5>
           </td>
           <td class="button">
             <button v-on:click.ctrl="doRemove(item)">
@@ -44,7 +45,7 @@
       </tbody>
     </table>
 
-    <div>
+    <div v-if="vif">
       <h2>商品</h2>
       <ul>
         <li v-for="shouhin in goods" v-bind:key="shouhin.name">
@@ -52,17 +53,15 @@
         </li>
       </ul>
       <h2>合計{{totalPrice}}円</h2>
-      <h4>お預かり<input type="number" min="0" v-model="oazukari"></h4>
+      <h4>お預かり<input type="number" min="0" v-model="oazukari">円</h4>
       <h4>おつり{{oazukari-totalPrice}}円</h4>
 
 
       <form class="add-form" v-on:submit.prevent="doAdd">
-        コメント <input type="text" ref="comment">
-        <button type="submit">追加</button>
+        <input type="text" ref="comment" :value="siki">
+        <button type="submit">会計済みにする</button>
       </form>
     </div>
-
-    <p>コントロールを押しながらクリックで削除</p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
