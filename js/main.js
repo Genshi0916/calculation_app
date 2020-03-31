@@ -42,6 +42,9 @@ var vm =new Vue({
     ],
     current:0,
     oazukari:0,
+    syoto:0,
+    tyoko:0,
+    itigo:0
   },
 
   computed: {
@@ -98,6 +101,12 @@ var vm =new Vue({
         state: 1
       })
       comment.value = ''
+    },
+
+    count:function(){
+      this.syoto = this.syoto + Number(goods[0].quantity);
+      this.tyoko = this.tyoko + Number(goods[1].quantity);
+      this.itigo = this.itigo + Number(goods[2].quantity);
     },
 
     doRemove: function (item) {
