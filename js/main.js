@@ -91,6 +91,7 @@ var vm =new Vue({
 
   methods: {
     doAdd: function() {
+      alert("おかいあげ");
       var comment = this.$refs.comment
       if (!comment.value.length) {
         return
@@ -112,6 +113,9 @@ var vm =new Vue({
     doRemove: function (item) {
       var index = this.todos.indexOf(item)
       this.todos.splice(index, 1)
+      this.syoto = this.syoto - goods[0].quantity
+      this.tyoko = this.tyoko - goods[1].quantity
+      this.itigo = this.itigo - goods[2].quantity
     }
   }
 })
